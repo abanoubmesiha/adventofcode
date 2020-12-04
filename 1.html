@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            let input = [1789,1818,1729,1578,1927,751,1772,1521,1850,1438,1855,1334,1878,1290,1678,1847,1495,1538,1403,1797,1906,1770,1963,
+                1370,1684,1328,1544,1528,1871,2010,1999,1347,1760,1903,1860,1468,1511,1477,1668,1979,1358,1298,1493,1459,1382,
+                2001,1394,1681,1515,1948,1991,1775,1661,1786,1966,1506,1853,1373,1454,1462,1830,1964,1442,1455,2008,1854,
+                1763,1758,1751,1460,1630,1487,1360,1793,1590,1940,1388,1313,1408,1429,1725,1397,1941,1974,1788,1473,
+                1913,664,1989,1490,1778,1726,1366,2005,1449,1924,1926,1769,1314,1636,1780,1546,1647,1856,320,396,1595,1867,1602,
+                1699,1367,1876,1662,1686,1581,1697,1938,1400,720,1808,1625,1439,1734,2003,1718,1879,1864,1811,1309,
+                721,1607,1814,1484,1869,1736,1507,1437,1894,1561,2004,269,1942,1915,1767,1562,1364,1783,
+                1863,1601,1323,182,1985,1722,1545,1774,1552,1742,1790,1874,1583,1308,1441,1463,1503,1447,1540,1953,1371,1331,1688,1905,1815,
+                1799,811,1446,1374,1936,1665,1433,1551,1806,1674,1784,1596,1704,1393,1691,1567,1335,593,1509,1986,1297,1419,1418,1339,
+                1745,1930,1514,1706];
+            
+            let findCouplesThatMake = (target) => {
+                let minus2020Array = input.map(input => target-input);
+                let found = [];
+                minus2020Array.forEach(m=>{
+                        if (input.includes(m)){
+                            found.push(m);
+                        }
+                    }
+                );
+                return found;
+            }
+            let findThreeNumbersThatMake2020 = () => {
+                let found = [];
+                for (let i = 2020; i > 0; i--){
+                    let numbers = findCouplesThatMake(i);
+                    let third = 2020-i; 
+                    if (input.includes(third) && ([...numbers, third].reduce((a, b) => a + b, 0) === 2020)){
+                        found = [...numbers, third];
+                    }
+                }
+                return found
+            }
+            console.log(findThreeNumbersThatMake2020());
+            
+        </script>
+    </head>
+<body>
+</body>
+</html>
+--- Day 1: Report Repair ---
+After saving Christmas five years in a row, you've decided to take a vacation at a nice resort on a tropical island. Surely, Christmas will go on without you.
+
+The tropical island has its own currency and is entirely cash-only. The gold coins used there have a little picture of a starfish; the locals just call them stars. None of the currency exchanges seem to have heard of them, but somehow, you'll need to find fifty of these coins by the time you arrive so you can pay the deposit on your room.
+
+To save your vacation, you need to get all fifty stars by December 25th.
+
+Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants one star. Good luck!
+
+Before you leave, the Elves in accounting just need you to fix your expense report (your puzzle input); apparently, something isn't quite adding up.
+
+Specifically, they need you to find the two entries that sum to 2020 and then multiply those two numbers together.
+
+For example, suppose your expense report contained the following:
+
+1721
+979
+366
+299
+675
+1456
+In this list, the two entries that sum to 2020 are 1721 and 299. Multiplying them together produces 1721 * 299 = 514579, so the correct answer is 514579.
+
+Of course, your expense report is much larger. Find the two entries that sum to 2020; what do you get if you multiply them together?
+
+Your puzzle answer was 471019.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+--- Part Two ---
+The Elves in accounting are thankful for your help; one of them even offers you a starfish coin they had left over from a past vacation. They offer you a second one if you can find three numbers in your expense report that meet the same criteria.
+
+Using the above example again, the three entries that sum to 2020 are 979, 366, and 675. Multiplying them together produces the answer, 241861950.
+
+In your expense report, what is the product of the three entries that sum to 2020?
+103,927,824
