@@ -2177,24 +2177,45 @@
             inputGroups = input.split("\n\n").map(g=>g.trim().split("\n").map(person=>person.trim()));
             let generalCount = 0;
             inputGroups.forEach(group => {
-                let countedQuestionsEachGroup = [];
-                group.forEach(person => {
-                    if (person.length > 1){ // person answered multiple questions
-                        questions = person.split("");
-                        questions.forEach(q=>{
-                            if (!countedQuestionsEachGroup.includes(q)){
-                                countedQuestionsEachGroup.push(q);
+                let allQuestions = [];
+                if (group.length === 1){
+                    generalCount += group[0].length;
+                } else {
+                    group.forEach(person=>{
+                        if (person.length === 1){
+                            let q = person;
+                            if (!allQuestions.includes(q)){
+                                allQuestions.push(q);
                             }
-                        })
-                    } else {// person answered one question
-                        if (!countedQuestionsEachGroup.includes(person)){
-                            countedQuestionsEachGroup.push(person);
+                        } else {
+                            let questions = person.split("");
+                            questions.forEach(q=>{
+                                if (!allQuestions.includes(q)){
+                                    allQuestions.push(q);
+                                }
+                            })
                         }
-                    }
-                })
-                generalCount += countedQuestionsEachGroup.length;
-            })
-            console.log(generalCount)
+                    })
+                    allQuestions.forEach(q=>{
+                        if (
+                            group.every(person=>{
+                                if (person.length > 1){
+                                    if (person.includes(q)){
+                                        return true;
+                                    }
+                                } else {
+                                    if (person === q){
+                                        return true;
+                                    }
+                                }
+                            })
+                        ){
+                            generalCount += 1;
+                        }
+                    })
+                }
+            });
+            console.log(generalCount);
         </script>
     </head>
 <body>
@@ -2296,4 +2317,25 @@ In the fourth group, everyone answered yes to only 1 question, a.
 In the fifth group, everyone (all 1 person) answered "yes" to 1 question, b.
 In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
 
-For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts?
+For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts? 3427
+
+
+
+<!-- loop through groups
+1- get all questions in a group
+
+    a- loop through a group
+    b- get each person
+    c- add all questions of each person once to all question array
+
+2- loop in all questions to find:
+    1- if a question present in all people
+        if person answered one question
+            check equality
+        if more
+            check includes
+
+    if true add to total count
+    
+    2- if question not present
+        skip to next question -->
