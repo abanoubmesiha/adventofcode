@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<!-- 
+    search for the bags that can contain shiny gold bag
+    1- loop through all the bags in any position.
+        {
+        light red:{
+            bright white: {
+                count: 1,
+                shiny gold: {
+                    count: 1
+                }
+            },
+            muted yellow: {
+                count: 2,
+                shiny gold: {
+                    count: 2,
+                    faded blue:{
+                        count: 9
+                    }
+                }
+            }
+        },
+        dark orange:{
+            bright white: {
+                count: 1,
+                shiny gold: {
+                    count: 1
+                }
+            },
+        }
+        }
+    2- get the two words before it and add it as empty object in a huge object.
+    3- loop again and get contain and the text before it.
+    4- got to it's object and add the count and bag and the after comma.
+    5- loop through the object to add the children
+    6- get the names of all parent names of selected bag
+         -->
+        <script>
+            let input = `light red bags contain 1 bright white bag, 2 muted yellow bags.
+                        dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+                        bright white bags contain 1 shiny gold bag.
+                        muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+                        shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+                        dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+                        vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+                        faded blue bags contain no other bags.
+                        dotted black bags contain no other bags.`;
+            
+            inputGroups = input.split("\n").map(g=>g.trim());
+            allBags = {};
+            // get bags and numbers
+            inputGroups = inputGroups.map(g=>{
+                g = g.split("bag");
+                g = g.map(words=> words.replace(/s contain/g, "").replace(/s,/g, "").replace(/,/g, "").trim());
+                g.pop();
+                return g;
+            })
+            // get bags only and put it into object
+            inputGroups.forEach(bags=>{
+                bags.forEach(bag=>{
+                    allBags[bag.replace(/\d+ /g, "")] = {
+                        count: null
+                    }
+                })
+            })
+            // get the data of the bags
+            for (let bag in allBags){
+                let bagDetails = inputGroups.find(g=>g[0] === bag);
+                if (bagDetails){
+                    bagDetails.forEach(b=>{
+                        if (b !== bag){
+                            allBags[bag] = {
+                                ...allBags[bag],
+                                [b.replace(/\d+ /g, "")]: {
+                                    count: Number(b.replace(/[^\d+ ]/g, ""))
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+            for (let bag in allBags){
+                delete allBags[bag].count;
+            }
+            let recursiveConnect = obj => {
+                // loop through the object to add data of children bags
+                for (let bag in obj){
+                    for (let childBag in obj[bag]){
+                        if (bag !== childBag && childBag !== "count"){
+                            obj[bag][childBag] = {...obj[bag][childBag], ...allBags[childBag]}
+                            recursiveConnect(allBags[bag]);
+                        }
+                    }
+                }
+            }
+            recursiveConnect(allBags);
+            // count the bags;
+            
+            let count = 0;
+            let keys = Object.keys(allBags);
+            keys.forEach(k=>{
+                recursiveFinder(allBags[k], "shiny gold" );
+            })
+            
+            
+            console.log(inputGroups);
+            console.log(allBags);
+            console.log(count);
+        </script>
+    </head>
+<body>
+</body>
+</html>
+--- Day 7: Handy Haversacks ---
+You land at the regional airport in time for your next flight. In fact, it looks like you'll even have time to grab some food: all flights are currently delayed due to issues in luggage processing.
+
+Due to recent aviation regulations, many rules (your puzzle input) are being enforced about bags and their contents; bags must be color-coded and must contain specific quantities of other color-coded bags. Apparently, nobody responsible for these regulations considered how long they would take to enforce!
+
+For example, consider the following rules:
+
+light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags.
+These rules specify the required contents for 9 bag types. In this example, every faded blue bag is empty, every vibrant plum bag contains 11 bags (5 faded blue and 6 dotted black), and so on.
+
+You have a shiny gold bag. If you wanted to carry it in at least one other bag, how many different bag colors would be valid for the outermost bag? (In other words: how many colors can, eventually, contain at least one shiny gold bag?)
+
+In the above rules, the following options would be available to you:
+
+A bright white bag, which can hold your shiny gold bag directly.
+A muted yellow bag, which can hold your shiny gold bag directly, plus some other bags.
+A dark orange bag, which can hold bright white and muted yellow bags, either of which could then hold your shiny gold bag.
+A light red bag, which can hold bright white and muted yellow bags, either of which could then hold your shiny gold bag.
+So, in this example, the number of bag colors that can eventually contain at least one shiny gold bag is 4.
+
+How many bag colors can eventually contain at least one shiny gold bag? (The list of rules is quite long; make sure you get all of it.)
