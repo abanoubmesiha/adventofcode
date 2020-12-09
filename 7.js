@@ -634,36 +634,35 @@ for (let bag in allBags){
         })
     }
 }
-
-let recursiveConnect = obj => {
-    // loop through the object to add data of children bags
-    for (let bag in obj){
-        if (bag !== "count"){
-            let directChildren = Object.keys(obj[bag]);
-            directChildren = directChildren.filter(item => item !== 'count');
-            obj[bag].bagsInHereAre = [...directChildren];
-            if (directChildren.length === 0){
-                obj[bag] = {...obj[bag], ...allBags[bag]};
-                obj[bag].bagsInHereAre.push(...Object.keys(allBags[bag]));
-                delete allBags[bag];
-            }
-            directChildren.forEach(b=>{
-                obj[bag][b] = {...obj[bag][b], ...allBags[b]}
-                obj[bag].bagsInHereAre.push(...Object.keys(allBags[b]))
+let newBags = {};
+let recursiveFill = (bags) => {
+    // if (Object.keys(bags).length > 1){
+        for (let b in bags){
+            if (allBags[b] && b !== "count"){
+                bags[b] = {...bags[b], ...allBags[b]}
                 delete allBags[b];
-                recursiveConnect(obj[bag][b]);
-            })
+                recursiveFill(bags[b]);
+            }
         }
-        // for (let childBag in obj[bag]){
-        //     if (bag !== childBag && childBag !== "count"){
-        //         obj[bag][childBag] = {...obj[bag][childBag], ...allBags[childBag]}
-        //         recursiveConnect(allBags[bag]);
-        //     }
-        // }
+    // }
+    return bags;
+}
+// loop over the main object
+// {get first bag
+// if has smaller bags other that 'count'
+// loop over first bag you just get
+// fill every bag from the main object
+// else, get the second bag from the main object}
+
+for (let bag in allBags){
+    if (bag !== "count"){
+        newBags[bag] = recursiveFill(allBags[bag])
     }
 }
-let newBags = {};
-recursiveConnect(newBags);
+
+// let recursiveConnect = (obj, newObj) => {
+// }
+// recursiveConnect(allBags, newBags);
 
 // get the list of all children bags
 let recursiveGetPropsNames = (obj, res) => {
