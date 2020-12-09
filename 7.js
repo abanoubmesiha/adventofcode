@@ -1,4 +1,4 @@
-let input = `light red bags contain 1 bright white bag, 2 muted yellow bags.
+let inputx = `light red bags contain 1 bright white bag, 2 muted yellow bags.
             dark orange bags contain 3 bright white bags, 4 muted yellow bags.
             bright white bags contain 1 shiny gold bag.
             muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
@@ -7,7 +7,7 @@ let input = `light red bags contain 1 bright white bag, 2 muted yellow bags.
             vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
             faded blue bags contain no other bags.
             dotted black bags contain no other bags.`;
-let inputx = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 1 dotted crimson bag.
+let input = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 1 dotted crimson bag.
             dotted plum bags contain 3 wavy cyan bags.
             muted salmon bags contain 2 pale purple bags, 3 dull orange bags, 2 dotted lime bags, 3 clear crimson bags.
             wavy green bags contain 1 plaid crimson bag.
@@ -602,93 +602,33 @@ let inputx = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 
             faded magenta bags contain 3 striped cyan bags, 4 muted silver bags.
             clear gray bags contain 4 muted gray bags, 2 wavy turquoise bags, 3 dotted plum bags.`;
 inputGroups = input.split("\n").map(g=>g.trim());
-allBags = {};
 // get bags and numbers
 inputGroups = inputGroups.map(g=>{
     g = g.split("bag");
     g = g.map(words=> words.replace(/s contain/g, "").replace(/s,/g, "").replace(/,/g, "").trim());
     g.pop();
-    g.forEach(bag=>{
-        allBags[bag.replace(/\d+ /g, "")] = {
-            count: null
-        }
-    })
     return g;
 })
-
-// get the data of the bags
-delete allBags["no other"];
-for (let bag in allBags){
-    delete allBags[bag].count;
-    let bagDetails = inputGroups.find(g=>g[0] === bag);
-    if (bagDetails){
-        bagDetails.forEach(b=>{
-            if (b !== bag && b !== "no other"){
-                allBags[bag] = {
-                    ...allBags[bag],
-                    [b.replace(/\d+ /g, "")]: {
-                        count: Number(b.replace(/[^\d+ ]/g, ""))
-                    }
+let count = 0;
+let targets = ["shiny gold"];
+let search = (targets) =>{
+    let savedBigBags = [];
+    targets.forEach(target=>{
+        inputGroups.forEach(g=>{
+            g = g.map(bag=>bag.replace(/\d+ /g, ""))
+            if (g.includes(target) && !targets.includes(g[0])){
+                if (!savedBigBags.includes(g[0])){
+                    count++;
+                    savedBigBags.push(g[0]);
                 }
             }
         })
+    })
+    if (savedBigBags.length > 0){
+        search(savedBigBags)
     }
 }
-let newBags = {};
-let recursiveFill = (bags) => {
-    // if (Object.keys(bags).length > 1){
-        for (let b in bags){
-            if (allBags[b] && b !== "count"){
-                bags[b] = {...bags[b], ...allBags[b]}
-                delete allBags[b];
-                recursiveFill(bags[b]);
-            }
-        }
-    // }
-    return bags;
-}
-// loop over the main object
-// {get first bag
-// if has smaller bags other that 'count'
-// loop over first bag you just get
-// fill every bag from the main object
-// else, get the second bag from the main object}
-
-for (let bag in allBags){
-    if (bag !== "count"){
-        newBags[bag] = recursiveFill(allBags[bag])
-    }
-}
-
-// let recursiveConnect = (obj, newObj) => {
-// }
-// recursiveConnect(allBags, newBags);
-
-// get the list of all children bags
-let recursiveGetPropsNames = (obj, res) => {
-    for (p in obj){
-        res.push(p);
-        if (typeof obj[p] === "object"){
-            recursiveGetPropsNames(obj[p], res);
-        }
-    }
-    return res;
-}
-let allChildrenBags = {};
-Object.keys(allBags).forEach(bigBag=>{
-    allChildrenBags[bigBag] = recursiveGetPropsNames(allBags[bigBag], []);
-})
-// count the bags that have the target bag
-let count = 0;
-for (bigBag in allChildrenBags){
-    if (allChildrenBags[bigBag].includes("shiny gold")){
-        count += 1;
-    }
-}
-
-console.log(inputGroups);
-console.log(allBags);
-console.log(allChildrenBags);
+search(targets);
 console.log(count);
     
 // --- Day 7: Handy Haversacks ---
