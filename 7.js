@@ -611,175 +611,205 @@ inputGroups = inputGroups.map(g=>{
     g.pop();
     return g;
 })
-
-class Bag {
-    constructor(){}
-    addChildBag(name){
-        this[name] = new Bag(name)
-    }
-    addChildBagFrom(name, allBags){
-        this[name] = allBags[name]
-    }
-    doYouHaveThisBag(name){
-        let res = false;
-        for (const bag in this){
-            if (bag === name){
-                res = this[bag];
-            }
+let count = ['shiny gold'];
+let completed = true;
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target)){
+            count.push(g[0]);
+            completed = false;
         }
-        return res;
-    }
-}
-class BigBagContainer {
-    constructor(){}
-    addBag(name){
-        this[name] = new Bag(name);
-    }
-    doYouHaveThisBag(name){
-        let res = false;
-        for (const bag in this){
-            if (bag === name){
-                res = this[bag];
-            }
-        }
-        return res;
-    }
-    doYouHaveTheseBagsInsideYourBags(names){
-        let res = new BigBagContainer();
-        if (typeof names === 'string'){
-            for (const bag in this){
-                if (this[bag].doYouHaveThisBag(names)){
-                    res.addBag(bag);
-                }
-            }
-        } else {
-            for (const name in names){
-                for (const bag in this){
-                    if (this[bag].doYouHaveThisBag(name)){
-                        res.addBag(bag);
-                    }
-                }
-            }
-        }
-        return res.length() > 0?res:false;
-    }
-    whichIsTheChildOfThisParentBag(bags, parent){
-        let res = [];
-        if (this[parent]){
-            let originalBagChildren = Object.keys(this[parent])  ;
-            for (const bag in bags){
-                if (originalBagChildren.includes(bag)){
-                    res.push(bag);
-                }
-            }
-        }
-        return res;
-    }
-    length(){
-        let count = 0
-        for (const p in this){
-            count += 1
-        }
-        return count;
-    }
-}
-class Tree {
-    constructor(root){}
-    recursiveFinder(childNode, thisAndDeeperProps){
-        let res = thisAndDeeperProps;
-        if (!thisAndDeeperProps[childNode]){
-            for (const node in thisAndDeeperProps){
-                if (node === 'shiny black'){debugger}
-                let test = JSON.stringify(thisAndDeeperProps[node]);
-                if (!JSON.stringify(thisAndDeeperProps[node]) === '{}'){
-                    res = this.recursiveFinder(childNode, thisAndDeeperProps[node])
-                }
-            }
-        }
-        return res;
-    }
-    addParentNodeTo(childNode, parentNode, ref = {}){
-        if (childNode === 'root'){
-            this[parentNode] = {}
-        } else {
-            let newThis = this.recursiveFinder(childNode, this);
-
-            newThis[childNode] = {...newThis[childNode], [parentNode]: ref}
-        }
-    }
-    countTopNodes(){
-        let count = 0;
-        let findEnd = thisAndDeeperProps => {
-            for (const bag in thisAndDeeperProps){
-                if (thisAndDeeperProps[bag] === "end"){
-                    count += 1;
-                } else {
-                    findEnd(thisAndDeeperProps[bag]);
-                }
-            }
-        }
-        findEnd(this);
-        return count;
-    }
-
-}
-
-let targetContainer = new BigBagContainer();
-targetContainer.addBag('shiny gold');
-
-let allBags = new BigBagContainer();
-
-inputGroups.forEach(g=>{
-    allBags.addBag(g[0]);
-    let bigBag = g.shift();
-    g.forEach(childBag=>{
-        allBags[bigBag].addChildBag(childBag);
     })
 })
-
-let shinyGold = new Tree();
-
-let recursiveParentFinder = (position, targets) => {
-    let parentBagsOfTargets = allBags.doYouHaveTheseBagsInsideYourBags(targets);
-    for (let parentBag in parentBagsOfTargets){
-        if (position === 'root'){
-            shinyGold.addParentNodeTo(position, parentBag, "end")
-        } else {
-            let childBagOfThatBag = allBags.whichIsTheChildOfThisParentBag(targets, parentBag)
-            childBagOfThatBag.forEach(CB=>{
-                shinyGold.addParentNodeTo(CB, parentBag, "end")
-            })
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target)){
+            count.push(g[0]);
+            completed = false;
         }
-    }
-    if (parentBagsOfTargets){
-        recursiveParentFinder(parentBagsOfTargets, parentBagsOfTargets);
-    }
-}
-recursiveParentFinder('root', targetContainer);
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target)){
+            count.push(g[0]);
+            completed = false;
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target)){
+            count.push(g[0]);
+            completed = false;
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target)){
+            count.push(g[0]);
+            completed = false;
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target)){
+            count.push(g[0]);
+            completed = false;
+        }
+    })
+})
+count = [...new Set(count)];
+count.shift();
+console.log()
+// class Bag {
+//     constructor(){}
+//     addChildBag(name){
+//         this[name] = new Bag(name)
+//     }
+//     addChildBagFrom(name, allBags){
+//         this[name] = allBags[name]
+//     }
+//     doYouHaveThisBag(name){
+//         let res = false;
+//         for (const bag in this){
+//             if (bag === name){
+//                 res = this[bag];
+//             }
+//         }
+//         return res;
+//     }
+// }
+// class BigBagContainer {
+//     constructor(){}
+//     addBag(name){
+//         this[name] = new Bag(name);
+//     }
+//     doYouHaveThisBag(name){
+//         let res = false;
+//         for (const bag in this){
+//             if (bag === name){
+//                 res = this[bag];
+//             }
+//         }
+//         return res;
+//     }
+//     doYouHaveTheseBagsInsideYourBags(names){
+//         let res = new BigBagContainer();
+//         if (typeof names === 'string'){
+//             for (const bag in this){
+//                 if (this[bag].doYouHaveThisBag(names)){
+//                     res.addBag(bag);
+//                 }
+//             }
+//         } else {
+//             for (const name in names){
+//                 for (const bag in this){
+//                     if (this[bag].doYouHaveThisBag(name)){
+//                         res.addBag(bag);
+//                     }
+//                 }
+//             }
+//         }
+//         return res.length() > 0?res:false;
+//     }
+//     whichIsTheChildOfThisParentBag(bags, parent){
+//         let res = [];
+//         if (this[parent]){
+//             let originalBagChildren = Object.keys(this[parent])  ;
+//             for (const bag in bags){
+//                 if (originalBagChildren.includes(bag)){
+//                     res.push(bag);
+//                 }
+//             }
+//         }
+//         return res;
+//     }
+//     length(){
+//         let count = 0
+//         for (const p in this){
+//             count += 1
+//         }
+//         return count;
+//     }
+// }
+// class Tree {
+//     constructor(root){}
+//     recursiveFinder(childNode, thisAndDeeperProps){
+//         let res = thisAndDeeperProps;
+//         if (!thisAndDeeperProps[childNode]){
+//             for (const node in thisAndDeeperProps){
+//                 if (node === 'shiny black'){debugger}
+//                 let test = JSON.stringify(thisAndDeeperProps[node]);
+//                 if (!JSON.stringify(thisAndDeeperProps[node]) === '{}'){
+//                     res = this.recursiveFinder(childNode, thisAndDeeperProps[node])
+//                 }
+//             }
+//         }
+//         return res;
+//     }
+//     addParentNodeTo(childNode, parentNode, ref = {}){
+//         if (childNode === 'root'){
+//             this[parentNode] = {}
+//         } else {
+//             let newThis = this.recursiveFinder(childNode, this);
 
-console.log(shinyGold.countTopNodes());
+//             newThis[childNode] = {...newThis[childNode], [parentNode]: ref}
+//         }
+//     }
+//     countTopNodes(){
+//         let count = 0;
+//         let findEnd = thisAndDeeperProps => {
+//             for (const bag in thisAndDeeperProps){
+//                 if (thisAndDeeperProps[bag] === "end"){
+//                     count += 1;
+//                 } else {
+//                     findEnd(thisAndDeeperProps[bag]);
+//                 }
+//             }
+//         }
+//         findEnd(this);
+//         return count;
+//     }
 
+// }
 
+// let targetContainer = new BigBagContainer();
+// targetContainer.addBag('shiny gold');
 
+// let allBags = new BigBagContainer();
 
+// inputGroups.forEach(g=>{
+//     allBags.addBag(g[0]);
+//     let bigBag = g.shift();
+//     g.forEach(childBag=>{
+//         allBags[bigBag].addChildBag(childBag);
+//     })
+// })
 
+// let shinyGold = new Tree();
 
+// let recursiveParentFinder = (position, targets) => {
+//     let parentBagsOfTargets = allBags.doYouHaveTheseBagsInsideYourBags(targets);
+//     for (let parentBag in parentBagsOfTargets){
+//         if (position === 'root'){
+//             shinyGold.addParentNodeTo(position, parentBag, "end")
+//         } else {
+//             let childBagOfThatBag = allBags.whichIsTheChildOfThisParentBag(targets, parentBag)
+//             childBagOfThatBag.forEach(CB=>{
+//                 shinyGold.addParentNodeTo(CB, parentBag, "end")
+//             })
+//         }
+//     }
+//     if (parentBagsOfTargets){
+//         recursiveParentFinder(parentBagsOfTargets, parentBagsOfTargets);
+//     }
+// }
+// recursiveParentFinder('root', targetContainer);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// console.log(shinyGold.countTopNodes());
 
 
 // let count = 0;
