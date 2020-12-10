@@ -602,17 +602,17 @@ let inputx = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 
             faded magenta bags contain 3 striped cyan bags, 4 muted silver bags.
             clear gray bags contain 4 muted gray bags, 2 wavy turquoise bags, 3 dotted plum bags.`;
 
-inputGroups = input.split("\n").map(g=>g.trim());
+inputGroups = input.split('\n').map(g=>g.trim());
 
 // get bags and numbers
 inputGroups = inputGroups.map(g=>{
-    g = g.split("bag");
-    g = g.map(words=> words.replace(/s contain/g, "").replace(/s,/g, "").replace(/,/g, "").trim().replace(/\d+ /, ""));
+    g = g.split('bag');
+    g = g.map(words=> words.replace(/s contain/g, '').replace(/s,/g, '').replace(/,/g, '').trim().replace(/\d+ /, ''));
     g.pop();
     return g;
 })
 
-let target = "shiny gold"
+let target = 'shiny gold'
 
 class Bag {
     constructor(){}
@@ -630,7 +630,39 @@ class AllBags {
     }
     
 }
+class Tree {
+    constructor(root){}
+    recursiveFinder(childNode, thisAndDeeperProps){
+        let res;
+        if (!thisAndDeeperProps[childNode]){
+            for (const node in thisAndDeeperProps){
+                res = this.recursiveFinder(childNode, thisAndDeeperProps[node])
+            }
+        } else {
+            res = thisAndDeeperProps;
+        }
+        return res;
+    }
+    addParentNodeTo(childNode, parentNode){
+        if (childNode === 'root'){
+            this[parentNode] = {}
+        } else {
+            let newThis = this.recursiveFinder(childNode, this);
+            
+            newThis[childNode] = {...newThis[childNode], [parentNode]:{}}
+        }
+    }
+    moveNode(node, targetNode){
+        this[targetNode] = {[this[node]]: this[node]}
+        // delete this[node];
+    }
 
+}
+let shinyGold = new Tree();
+shinyGold.addParentNodeTo('root', 'bright white')
+shinyGold.addParentNodeTo('bright white', 'light red')
+shinyGold.addParentNodeTo('light red', 'bony')
+console.log(shinyGold);
 let allBags = new AllBags();
 
 inputGroups.forEach(g=>{
@@ -668,7 +700,7 @@ console.log(allBags);
 
 
 // let count = 0;
-// let startTarget = ["shiny gold"];
+// let startTarget = ['shiny gold'];
 // let parents = []
 // let search = (targets) =>{
 //     if (JSON.stringify(parents) !== JSON.stringify(targets)){
@@ -677,7 +709,7 @@ console.log(allBags);
 //     let savedBigBags = [];
 //     targets.forEach(target=>{
 //         inputGroups.forEach(g=>{
-//             g = g.map(bag=>bag.replace(/\d+ /g, ""))
+//             g = g.map(bag=>bag.replace(/\d+ /g, ''))
 //             if (g.includes(target) && !targets.includes(g[0])){
 //                 if (!savedBigBags.includes(g[0])){
 //                     count++;
