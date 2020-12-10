@@ -605,31 +605,136 @@ inputGroups = input.split("\n").map(g=>g.trim());
 // get bags and numbers
 inputGroups = inputGroups.map(g=>{
     g = g.split("bag");
-    g = g.map(words=> words.replace(/s contain/g, "").replace(/s,/g, "").replace(/,/g, "").trim());
+    g = g.map(words=> words.replace(/s contain/g, "").replace(/s,/g, "").replace(/,/g, "").trim().replace(/\d+ /, ""));
     g.pop();
     return g;
 })
-let count = 0;
-let targets = ["shiny gold"];
-let search = (targets) =>{
-    let savedBigBags = [];
-    targets.forEach(target=>{
-        inputGroups.forEach(g=>{
-            g = g.map(bag=>bag.replace(/\d+ /g, ""))
-            if (g.includes(target) && !targets.includes(g[0])){
-                if (!savedBigBags.includes(g[0])){
-                    count++;
-                    savedBigBags.push(g[0]);
-                }
-            }
-        })
-    })
-    if (savedBigBags.length > 0){
-        search(savedBigBags)
+let count = [];
+let target = "shiny gold"
+let parentsOfShinyGold = [];
+let brothersMayBeParentsInFuture = [];
+// let recursiveFindParents = (searchHere, target, results) => {
+//     searchHere.forEach(g=>{
+//         if (g[0] !== target && g.includes(target)){
+//             results.push(g[0]);
+//         }
+//     });
+// }
+
+inputGroups.forEach(g=>{
+    if (g[0] !== target && g.includes(target)){
+        parentsOfShinyGold.push(g[0]);
+        brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
     }
-}
-search(targets);
-console.log(count);
+});
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+let parentsOfParentsOfShinyGold = [];
+parentsOfShinyGold = parentsOfShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p));
+parentsOfShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            parentsOfParentsOfShinyGold.push(g[0]);
+            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
+        }
+    });
+})
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+
+let parentsOfParentsOfParentsOfShinyGold = [];
+parentsOfParentsOfShinyGold = parentsOfParentsOfShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
+parentsOfParentsOfShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            parentsOfParentsOfParentsOfShinyGold.push(g[0]);
+            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
+        }
+    });
+})
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+
+let X4ShinyGold = [];
+
+parentsOfParentsOfParentsOfShinyGold = parentsOfParentsOfParentsOfShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
+parentsOfParentsOfParentsOfShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            X4ShinyGold.push(g[0]);
+        }
+    });
+})
+
+let X5ShinyGold = [];
+
+X4ShinyGold = X4ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
+X4ShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            X5ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
+        }
+    });
+})
+
+let X6ShinyGold = [];
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+X5ShinyGold = X5ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
+X5ShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            X6ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
+        }
+    });
+})
+
+let X7ShinyGold = [];
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+X6ShinyGold = X6ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
+X6ShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            X7ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
+        }
+    });
+})
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+
+let X8ShinyGold = [];
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+X7ShinyGold = X7ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
+X7ShinyGold.forEach(directParent=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== directParent && g.includes(directParent)){
+            X8ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
+        }
+    });
+})
+brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
+console.log(inputGroups);
+// let count = 0;
+// let startTarget = ["shiny gold"];
+// let parents = []
+// let search = (targets) =>{
+//     if (JSON.stringify(parents) !== JSON.stringify(targets)){
+//         parents.push(targets);
+//     }
+//     let savedBigBags = [];
+//     targets.forEach(target=>{
+//         inputGroups.forEach(g=>{
+//             g = g.map(bag=>bag.replace(/\d+ /g, ""))
+//             if (g.includes(target) && !targets.includes(g[0])){
+//                 if (!savedBigBags.includes(g[0])){
+//                     count++;
+//                     savedBigBags.push(g[0]);
+//                 }
+//             }
+//         })
+//     })
+//     if (savedBigBags.length > 0){
+//         search(savedBigBags)
+//     }
+// }
+// search(startTarget);
+// parents.shift();
+// console.log(count, startTarget, parents.flat().length);
     
 // --- Day 7: Handy Haversacks ---
 // You land at the regional airport in time for your next flight. In fact, it looks like you'll even have time to grab some food: all flights are currently delayed due to issues in luggage processing.
