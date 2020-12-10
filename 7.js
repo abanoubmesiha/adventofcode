@@ -1,4 +1,4 @@
-let inputx = `light red bags contain 1 bright white bag, 2 muted yellow bags.
+let input = `light red bags contain 1 bright white bag, 2 muted yellow bags.
             dark orange bags contain 3 bright white bags, 4 muted yellow bags.
             bright white bags contain 1 shiny gold bag.
             muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
@@ -7,7 +7,7 @@ let inputx = `light red bags contain 1 bright white bag, 2 muted yellow bags.
             vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
             faded blue bags contain no other bags.
             dotted black bags contain no other bags.`;
-let input = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 1 dotted crimson bag.
+let inputx = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 1 dotted crimson bag.
             dotted plum bags contain 3 wavy cyan bags.
             muted salmon bags contain 2 pale purple bags, 3 dull orange bags, 2 dotted lime bags, 3 clear crimson bags.
             wavy green bags contain 1 plaid crimson bag.
@@ -601,7 +601,9 @@ let input = `vibrant salmon bags contain 1 vibrant gold bag, 2 wavy aqua bags, 1
             mirrored orange bags contain 1 plaid magenta bag, 5 muted red bags, 3 pale lime bags.
             faded magenta bags contain 3 striped cyan bags, 4 muted silver bags.
             clear gray bags contain 4 muted gray bags, 2 wavy turquoise bags, 3 dotted plum bags.`;
+
 inputGroups = input.split("\n").map(g=>g.trim());
+
 // get bags and numbers
 inputGroups = inputGroups.map(g=>{
     g = g.split("bag");
@@ -609,106 +611,62 @@ inputGroups = inputGroups.map(g=>{
     g.pop();
     return g;
 })
-let count = [];
+
 let target = "shiny gold"
-let parentsOfShinyGold = [];
-let brothersMayBeParentsInFuture = [];
-// let recursiveFindParents = (searchHere, target, results) => {
-//     searchHere.forEach(g=>{
-//         if (g[0] !== target && g.includes(target)){
-//             results.push(g[0]);
-//         }
-//     });
-// }
+
+class Bag {
+    constructor(){}
+    addChildBag(name){
+        this[name] = new Bag(name)
+    }
+    addChildBagFrom(name, allBags){
+        this[name] = allBags[name]
+    }
+}
+class AllBags {
+    constructor(){}
+    addBag(name){
+        this[name] = new Bag(name);
+    }
+    
+}
+
+let allBags = new AllBags();
 
 inputGroups.forEach(g=>{
-    if (g[0] !== target && g.includes(target)){
-        parentsOfShinyGold.push(g[0]);
-        brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-    }
-});
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-let parentsOfParentsOfShinyGold = [];
-parentsOfShinyGold = parentsOfShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p));
-parentsOfShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            parentsOfParentsOfShinyGold.push(g[0]);
-            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-        }
-    });
-})
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-
-let parentsOfParentsOfParentsOfShinyGold = [];
-parentsOfParentsOfShinyGold = parentsOfParentsOfShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
-parentsOfParentsOfShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            parentsOfParentsOfParentsOfShinyGold.push(g[0]);
-            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-        }
-    });
-})
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-
-let X4ShinyGold = [];
-
-parentsOfParentsOfParentsOfShinyGold = parentsOfParentsOfParentsOfShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
-parentsOfParentsOfParentsOfShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            X4ShinyGold.push(g[0]);
-        }
-    });
+    allBags.addBag(g[0]);
+    let bigBag = g.shift();
+    g.forEach(childBag=>{
+        allBags[bigBag].addChildBag(childBag);
+    })
 })
 
-let X5ShinyGold = [];
+console.log(allBags);
 
-X4ShinyGold = X4ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
-X4ShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            X5ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-        }
-    });
-})
 
-let X6ShinyGold = [];
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-X5ShinyGold = X5ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
-X5ShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            X6ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-        }
-    });
-})
 
-let X7ShinyGold = [];
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-X6ShinyGold = X6ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
-X6ShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            X7ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-        }
-    });
-})
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
 
-let X8ShinyGold = [];
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-X7ShinyGold = X7ShinyGold.filter(p=>!brothersMayBeParentsInFuture.includes(p))
-X7ShinyGold.forEach(directParent=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== directParent && g.includes(directParent)){
-            X8ShinyGold.push(g[0]);            brothersMayBeParentsInFuture.push(g.filter(bag=>(bag === g[0] || bag === target)?false:true));
-        }
-    });
-})
-brothersMayBeParentsInFuture = brothersMayBeParentsInFuture.flat()
-console.log(inputGroups);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // let count = 0;
 // let startTarget = ["shiny gold"];
 // let parents = []
