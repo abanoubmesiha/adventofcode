@@ -611,59 +611,76 @@ inputGroups = inputGroups.map(g=>{
     g.pop();
     return g;
 })
+
 let count = ['shiny gold'];
-let completed = true;
+
 count.forEach(target=>{
     inputGroups.forEach(g=>{
         if (g[0] !== target && g.includes(target)){
             count.push(g[0]);
-            completed = false;
         }
     })
 })
-count.forEach(target=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== target && g.includes(target)){
-            count.push(g[0]);
-            completed = false;
-        }
-    })
-})
-count.forEach(target=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== target && g.includes(target)){
-            count.push(g[0]);
-            completed = false;
-        }
-    })
-})
-count.forEach(target=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== target && g.includes(target)){
-            count.push(g[0]);
-            completed = false;
-        }
-    })
-})
-count.forEach(target=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== target && g.includes(target)){
-            count.push(g[0]);
-            completed = false;
-        }
-    })
-})
-count.forEach(target=>{
-    inputGroups.forEach(g=>{
-        if (g[0] !== target && g.includes(target)){
-            count.push(g[0]);
-            completed = false;
-        }
-    })
-})
-count = [...new Set(count)];
 count.shift();
-console.log()
+
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+count.forEach(target=>{
+    inputGroups.forEach(g=>{
+        if (g[0] !== target && g.includes(target) && !count.includes(g[0])){
+            count.push(g[0]);
+        }
+    })
+})
+
+console.log(count)
 // class Bag {
 //     constructor(){}
 //     addChildBag(name){
