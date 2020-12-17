@@ -1,11 +1,11 @@
-let input1 = `0,3,6`; 
+let input = `0,3,6`; 
 let input2 = `1,3,2`;
 let input3 = `2,1,3`;
 let input4 = `1,2,3`;
 let input5 = `2,3,1`;
 let input6 = `3,2,1`;
 let input7 = `3,1,2`;
-let input = `0,14,1,3,7,9`;
+let input8 = `0,14,1,3,7,9`;
     
 inputGroups = input.split(',').map(g=>Number(g));
 
@@ -21,6 +21,7 @@ for (let i = startWithTurn; i <= 2020; i++){
         occurancesOfLastNumberSpoken = occurancesOfLastNumberSpoken.sort((a, b)=> a.t>b.t?-1:1)
         let newNumber = occurancesOfLastNumberSpoken[0].t - occurancesOfLastNumberSpoken[1].t
         turns.push({t: i, v: newNumber})
+
     } else {
         turns.push({t: i, v: 0})
     }
